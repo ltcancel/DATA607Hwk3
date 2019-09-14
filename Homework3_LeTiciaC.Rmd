@@ -1,0 +1,93 @@
+---
+title: "DATA607Hwk3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(stringr)
+
+```
+
+
+Load raw data
+```{r}
+raw.data <-"555-1239Moe Szyslak(636) 555-0113Burns, C. Montgomery555-6542Rev. Timothy Lovejoy555 8904Ned Flanders636-555-3226Simpson, Homer5553642Dr. Julius Hibbert"
+```
+
+
+Extract all names
+```{r}
+name <- unlist(str_extract_all(raw.data, "[[:alpha:]., ]{2,}")) 
+name
+```
+
+
+Rearrange vector to First Name then Last Name
+```{r}
+name
+fl_extract <- unlist(str_split(name[5], ","))
+fl_extract
+new_name <- str_c(fl_extract[2], fl_extract[1], sep = " ")
+new_name
+name[5] <- new_name
+fl_extract <- unlist(str_split(name[2], ","))
+fl_extract
+new_name <- str_c(fl_extract[2], fl_extract[1], sep = " ")
+new_name
+name[2] <- new_name
+```
+
+
+show all new names
+```{r}
+name
+```
+
+
+Vector indicating if charachter has a title
+```{r}
+pmatch(c("Dr.", "Rev."), name)
+```
+
+
+Vector checking if character has a second name
+```{r}
+str_extract(name, "[[:alpha:]][[:blank:]][[:alpha:]]")
+```
+
+
+Question 4 - describe type of strings and construct example
+4.1 Digits at the end of the exression or sting ex: Street number 87
+```{r}
+#[0-9]+\\$
+```
+
+
+4.2 Word edge, all letters a-z, item should be matched at least 1 time but no more than 4, follwed by word edge. Or a 4 letter word. ex: "book"
+```{r}
+#\\b[a-z]{1,4}\\b
+```
+
+
+4.3 Can contain a "." and is optional. Sting or expression ends in .txt ex: "file.txt"
+```{r}
+#.*?\\.txt$
+```
+
+
+4.4 2 digits, a forward slash, followed by 2 more digits, a forward slash, and ends with 4 digits. Like a date ex: 02/01/2018
+```{r}
+#\\d{2}/\\d{2}/\\d{4}
+```
+
+
+4.5 Optional period(s) enclosed in perentheses, followed by another optional period(s), followed by a forward slash and ending with the number 1. ex: (..)../1 or ()../1 or (..)/1
+```{r}
+#<(.+?)>.+?</\\1>
+```
+
